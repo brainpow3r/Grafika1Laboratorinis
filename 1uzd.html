@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <input type="range" min="0" max="8" value="0" step="1" onchange="changeValueAndRedraw(this.value)" />
+        <span id="range">0</span>
+        
+        <script type="application/javascript">
+            
+            function draw(step) {
+                var canvas = document.getElementById("myCanvas");
+                var COLOR_RED = "rgba(255, 0, 0, 1)";
+                var COLOR_GREEN = "rgba(0, 255, 0, 1)";
+                var COLOR_BLUE = "rgba(0, 0, 255, 1)";
+                var COLOR_ORANGE = "rgba(255, 140, 0, 1)";
+
+                if (canvas.getContext) {
+                    var ctx = canvas.getContext("2d");
+                    canvas.width = canvas.width;
+
+                    var s = step - 1;
+                    recursiveDraw(step);
+                }
+
+            // recursively draw fractal for 'step' steps
+            function recursiveDraw(step) {
+
+                if (step > 0) {
+                    step = step - 1;
+                    ctx.save();
+                    ctx.save();
+                    ctx.save();
+
+                    if (step == s) {
+                        ctx.fillStyle = COLOR_RED;
+                    }
+
+                    ctx.transform(-0.5, 0, 0, -0.5, 500, 0);
+                    ctx.rotate(Math.PI / -2);
+                    recursiveDraw(step, 0);
+                    ctx.restore();
+                    
+                    if(step == s) {
+                        ctx.fillStyle=COLOR_GREEN;
+                    }
+
+                    ctx.transform(-0.25, 0, 0, 0.25, 125, 375);
+                    ctx.rotate(Math.PI);
+                    recursiveDraw(step, 1);
+                    ctx.restore();
+
+                    if (step == s) {
+                        ctx.fillStyle = COLOR_BLUE;
+                    }
+
+                    ctx.transform(0.5, 0, 0, 0.5, 0, 0);
+                    recursiveDraw(step, 2);
+                    ctx.restore();
+                    
+                    if (step == s) {
+                        ctx.fillStyle = COLOR_ORANGE;
+                    }
+                    
+                    ctx.transform(-0.5, 0, 0, 0.5, 250, 500);
+                    ctx.rotate(Math.PI);
+                    recursiveDraw(step, 3);
+                    
+                } else drawBaseFigure();
+                
+            }
+
+            function drawBaseFigure() {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(500, 0);
+                ctx.lineTo(500, 500);
+                ctx.lineTo(200, 500);
+                ctx.lineTo(100, 150);
+                ctx.lineTo(0, 150);
+                ctx.lineTo(0, 0);
+                ctx.fill();
+            }
+
+        }
+
+        // changes value by the slider and paints fractal with new 'steps' value
+        function changeValueAndRedraw(newValue) {
+            document.getElementById("range").innerHTML=newValue;
+            draw(newValue);
+        }
+
+        </script>
+    </head>
+    <body onload="draw(0)">
+        <h1>Fraktalas</h1>
+        <canvas id="myCanvas" width=500 height=500 style="border: 1px solid black;"></canvas>        
+    </body>
+</html>
